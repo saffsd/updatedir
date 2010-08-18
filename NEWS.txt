@@ -6,6 +6,13 @@
 News
 ====
 
+0.1.1
+---
+
+*Release date: 18-Aug-2010*
+
+* Added recurisve directory creation for ssh
+ 
 0.1
 ---
 
