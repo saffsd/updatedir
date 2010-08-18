@@ -39,6 +39,7 @@ def updatetree(source, dest, overwrite=False):
               logger.debug("copy '%s' -> '%s'", src, dst)
               shutil.copyfile(src,dst)
 
+      # TODO: mkdir -p behaviour
       if not os.path.exists(dest):
         os.mkdir(dest)
 
@@ -91,11 +92,22 @@ def updatetree(source, dest, overwrite=False):
           except IOError:
             sftp.put(src, dst)
 
-    try:
-      sftp.stat(parsed_url.path)
-    except IOError:
-      logger.debug("creating '%s'", parsed_url.path)
-      sftp.mkdir(parsed_url.path)
+    head = str(parsed_url.path)
+    tails = []
+    done = False
+    # Roll back the path until we find one that exists
+    while not done:
+      try:
+        sftp.stat(head)
+        done = True
+      except IOError:
+        head, tail = os.path.split(head)
+        tails.append(tail)
+
+    # Now create all the missing paths that don't exist
+    for tail in reversed(tails):
+      head = os.path.join(head, tail)
+      sftp.mkdir(head)
 
     sftp.chdir(parsed_url.path)
     os.path.walk(source, visit, None)
