@@ -1,23 +1,24 @@
-This file requires editing
+Introduction
 ==========================
 
-Note to the author: Please add something informative to this README *before*
-releasing your software, as `a little documentation goes a long way`_.  Both
-README.rst (this file) and NEWS.txt (release notes) will be included in your
-package metadata which gets displayed in the PyPI page for your project.
+updatedir is a python module which pushes updates from one directory to another.
+It is intended to automatically handle the transport layer.
 
-You can take a look at the README.txt of other projects, such as repoze.bfg
-(http://bfg.repoze.org/trac/browser/trunk/README.txt) for some ideas.
+As of 0.1, only local update and update over ssh are supported.
 
-.. _`a little documentation goes a long way`: http://www.martinaspeli.net/articles/a-little-documentation-goes-a-long-way
+The update algorithm is also rather stupid - it just skips any files if the filename
+already exists. This could be made more sophisiticated, but is beyond my current needs.
+
 
 Credits
 -------
 
+- `Paramiko`_
 - `Distribute`_
 - `Buildout`_
 - `modern-package-template`_
 
+.. _Paramiko: http://www.lag.net/paramiko/
 .. _Buildout: http://www.buildout.org/
 .. _Distribute: http://pypi.python.org/pypi/distribute
 .. _`modern-package-template`: http://pypi.python.org/pypi/modern-package-template
