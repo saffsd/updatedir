@@ -62,11 +62,19 @@ def updatetree(source, dest, overwrite=False):
       transport.connect(username = username, password = parsed_url.password)
     # TODO allow the keyfile to be configured in .hydratrc
     elif os.path.exists(os.path.expanduser('~/.ssh/id_rsa')):
-      logger.debug("Using private key")
+      logger.debug("Using private RSA key")
       privatekeyfile = os.path.expanduser('~/.ssh/id_rsa')
       mykey = paramiko.RSAKey.from_private_key_file(privatekeyfile)
       transport.connect(username = username, pkey = mykey)
+    elif os.path.exists(os.path.expanduser('~/.ssh/id_dsa')):
+      logger.debug("Using private DSS key")
+      privatekeyfile = os.path.expanduser('~/.ssh/id_dsa')
+      mykey = paramiko.DSSKey.from_private_key_file(privatekeyfile)
+      transport.connect(username = username, pkey = mykey)
+    else:
+      raise ValueError, "Cannot connect transport: Unable to authenticate"
     logger.debug("Transport Connected")
+
     # Start the sftp client
     sftp = paramiko.SFTPClient.from_transport(transport)
 
